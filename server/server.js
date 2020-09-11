@@ -25,9 +25,17 @@ app.get('/api/v1/users', (req, resp) => {
 app.get('/api/v1/users/:id', (req, resp) => {
   const { id } = req.params;
 
-  const getUserById = app.locals.users.filter(user => user.id === +id)
-  resp.status(200).json(getUserById);
-})
+  const getUserById = app.locals.users.find(user => user.id === +id)
+  if (getUserById) {
+    resp.status(200).json(getUserById);
+  }
+  else {
+    return resp.status(404).json({
+      errorMessage: `Could not get user's data, no user with id: ${id} found`
+    })
+  }
+}) // should this be a post that checks the password stored for a user?
+// tomatillos was set up as a post
 
 app.get('/api/v1/bookings', (req, resp) => {
   resp.status(200).json(app.locals.bookings);
@@ -36,8 +44,15 @@ app.get('/api/v1/bookings', (req, resp) => {
 app.get('/api/v1/bookings/:id', (req, resp) => {
   const { id } = req.params;
 
-  const getBookingById = app.locals.bookings.filter(booking => booking.id === +id)
-  resp.status(200).json(getBookingById);
+  const getBookingById = app.locals.bookings.find(booking => booking.id === id)
+  if (getBookingById) {
+    resp.status(200).json(getBookingById);
+  }
+  else {
+    resp.status(404).json({
+      errorMessage: `Could not get booking's data, no booking with id: ${id} found`
+    })
+  }
 })
 
 app.post('/api/v1/bookings', (req, resp) => {
@@ -55,7 +70,7 @@ app.post('/api/v1/bookings', (req, resp) => {
     id: Date.now()
   }
 
-  app.locals.whitewater.push(newBooking);
+  app.locals.bookings.push(newBooking);
   return resp
     .status(201)
     .json({ booking: newBooking});

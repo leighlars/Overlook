@@ -5,7 +5,13 @@ const rootURL = "https://fe-apps.herokuapp.com/api/v1/overlook/1904/";
  export const getUserData = () => {
    return fetch(`${rootURL}users/users`)
      .then(response => response.json())
- }
+ } // prabably shouldn't ever use this. An individual user shouldn't be downloading every other users' info
+
+export const getUserDataById = (userId) => {
+  return fetch(`${rootURL}users/${userId}`)
+  .then(response => {response.json()})
+} // returns user single object
+//// This was a post in a later project that checked for password
 
  export const getRoomsData = () => {
    return fetch(`${rootURL}rooms/rooms`)
@@ -16,6 +22,10 @@ const rootURL = "https://fe-apps.herokuapp.com/api/v1/overlook/1904/";
    return fetch(`${rootURL}bookings/bookings`)
      .then(response => response.json())
  }
+
+ export const getBookingDataById = (bookingId) => {
+   return fetch(`${rootURL}bookings/${bookingId}`)
+ } //returns single booking object
 
  export const postNewBooking = (newBooking) => {
    fetch(`${rootURL}bookings/bookings`, {
